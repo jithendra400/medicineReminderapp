@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Reminder System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .reminder-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reminder-form">
+        <h2>Medicine Reminder</h2>
+
+        <label for="medicine">Medicine Name:</label>
+        <input type="text" id="medicine" placeholder="Enter medicine name">
+
+        <label for="dosage">Dosage:</label>
+        <input type="text" id="dosage" placeholder="Enter dosage (e.g., 1 tablet)">
+
+        <label for="date">Date (YYYY-MM-DD):</label>
+        <input type="date" id="date">
+
+        <label for="time">Time (HH:MM):</label>
+        <input type="time" id="time">
+
+        <button onclick="setReminder()">Set Reminder</button>
+    </div>
+
+    <script>
+        function setReminder() {
+            const medicine = document.getElementById('medicine').value;
+            const dosage = document.getElementById('dosage').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+
+            if (!medicine || !dosage || !date || !time) {
+                alert("Please fill in all the fields.");
+                return;
+            }
+
+            const reminderDateTime = new Date(date + ' ' + time);
+            const currentTime = new Date();
+
+            if (reminderDateTime < currentTime) {
+                alert("Please select a future date and time.");
+                return;
+            }
+
+            const timeDifference = reminderDateTime - currentTime;
+
+            setTimeout(function() {
+                new Notification("Medicine Reminder", {
+                    body: `Time to take your medicine: ${medicine}, Dosage: ${dosage}`,
+                    icon: 'https://via.placeholder.com/150'  // Placeholder image for notification
+                });
+            }, timeDifference);
+
+            alert("Reminder is set!");
+        }
+
+        // Request permission for notifications
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    </script>
+
+</body>
+</html>
